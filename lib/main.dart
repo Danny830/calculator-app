@@ -62,6 +62,7 @@ class _MyHomePageState extends State<MyHomePage> {
     division = false;
     equalState = false;
     resultList = "0";
+    //_stringResult = "0";
 
   }
 
@@ -87,6 +88,17 @@ class _MyHomePageState extends State<MyHomePage> {
       print(_stringResult);
 
     }
+    else if (resultList == "-0") {
+
+      list.add(-num.parse(input));
+      setState(() {
+        _result = num.parse(list.join());
+        _stringResult = _result.toString();
+        resultList = _result.toString();
+      });
+      print(_result);
+
+    }
     else {
 
       list.add(num.parse(input));
@@ -102,6 +114,13 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   void _giveResult(String arithmetic) {
+
+    if (list.isEmpty) {
+      list.add(0);
+    }
+    if (query.isEmpty) {
+      query.add(0);
+    }
 
     listResult = list.join();
     queryResult = query.join();
@@ -158,6 +177,20 @@ class _MyHomePageState extends State<MyHomePage> {
         break;
     }
 
+    if (_result.round() == _result) {
+
+      _result = _result.toInt();
+      setState(() {
+        _stringResult = _result.toString();
+      });
+      print(_stringResult);
+      query.clear();
+      query.add(_result);
+
+    }
+
+    resultList = "0";
+
   }
 
   void _allClear() {
@@ -179,25 +212,112 @@ class _MyHomePageState extends State<MyHomePage> {
 
   void _negate() {
 
-    // if (query.isEmpty) {
-    //   setState(() {
-    //     _result = _result * -1;
-    //     _stringResult = _result.toString();
-    //     resultList = _stringResult;
-    //   });
-    //   list.clear();
-    //   list.add(_result);
-    // }
-    // else {
-    //   setState(() {
-    //     _result = _result * -1;
-    //     _stringResult = _result.toString();
-    //     resultList = _stringResult;
-    //   });
-    //   query.clear();
-    //   query.add(_result);
-    // }
+    if (equalState) {
 
+      // setState(() {
+      //   _result = _result * -1;
+      //   _stringResult = _result.toString();
+      //   resultList = _stringResult;
+      // });
+      // query.clear();
+      // query.add(_result);
+
+      if (_stringResult == "0") {
+
+        setState(() {
+          _stringResult = "-$_stringResult";
+          resultList = _stringResult;
+        });
+
+      }
+      else if (_stringResult == "-0") {
+
+        setState(() {
+          _stringResult = _result.toString();
+          resultList = _stringResult;
+        });
+
+      }
+      else {
+
+        setState(() {
+          _result = _result * -1;
+          _stringResult = _result.toString();
+          resultList = _stringResult;
+        });
+        print(_result);
+        query.clear();
+        query.add(_result);
+        print(query);
+
+      }
+
+    }
+    else {
+
+      if (_stringResult == "0") {
+
+        setState(() {
+          _stringResult = "-$_stringResult";
+          resultList = _stringResult;
+        });
+
+      }
+      else if (_stringResult == "-0") {
+
+        setState(() {
+          _stringResult = _result.toString();
+          resultList = _stringResult;
+        });
+
+      }
+      else if (list.isEmpty) {
+
+        setState(() {
+          _stringResult = "-0";
+          resultList = _stringResult;
+        });
+
+      }
+      else {
+
+        setState(() {
+          _result = _result * -1;
+          _stringResult = _result.toString();
+          resultList = _stringResult;
+        });
+        print(_result);
+        list.clear();
+        list.add(_result);
+
+      }
+
+      // if (_stringResult.contains("-")) {
+      //
+      //   setState(() {
+      //     _result *= -1;
+      //     print(_result);
+      //     _stringResult = _result.toString();
+      //     resultList = _stringResult;
+      //   });
+      //
+      // }
+      // else {
+      //
+      //   setState(() {
+      //     _result = _result * -1;
+      //     print(_result);
+      //     _stringResult = "-$_stringResult";
+      //     resultList = _stringResult;
+      //   });
+      //
+      // }
+
+      // list.clear();
+      // list.add(_result);
+      // print(list);
+
+    }
 
   }
 
