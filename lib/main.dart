@@ -39,7 +39,7 @@ class _MyHomePageState extends State<MyHomePage> {
   String resultList = "0";
   String queryResult = "";
   String listResult = "";
-  bool _override = true;
+  bool clear = false;
   bool addition = false;
   bool subtraction = false;
   bool multiplication = false;
@@ -47,11 +47,26 @@ class _MyHomePageState extends State<MyHomePage> {
   bool equalState = false;
   bool decimalState = false;
   bool negation = false;
+  bool zeroError = false;
 
   void _incrementCounter() {
     setState(() {
       _result++;
     });
+  }
+
+  void checkDecimals() {
+
+    if (_stringResult.contains(".")) {
+
+      for (int i = 0; i < _stringResult.length; i++) {
+
+        if ()
+
+      }
+
+    }
+
   }
 
   void clearArithmetic() {
@@ -68,6 +83,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   void _input(input) {
 
+    clear = true;
     if (equalState) {
 
       equalState = false;
@@ -115,6 +131,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   void _giveResult(String arithmetic) {
 
+    zeroError = false;
     if (list.isEmpty) {
       list.add(0);
     }
@@ -168,6 +185,7 @@ class _MyHomePageState extends State<MyHomePage> {
         }
         catch(e) {
           print("Error caught, Divide by Zero");
+          zeroError = true;
           setState(() {
             _stringResult = "Error";
           });
@@ -177,7 +195,7 @@ class _MyHomePageState extends State<MyHomePage> {
         break;
     }
 
-    if (_result.round() == _result) {
+    if (_result.round() == _result && !zeroError) {
 
       _result = _result.toInt();
       setState(() {
@@ -186,6 +204,12 @@ class _MyHomePageState extends State<MyHomePage> {
       print(_stringResult);
       query.clear();
       query.add(_result);
+
+    }
+
+    if (_result.round() == (_result + 1) && (checkDecimals())) {
+
+
 
     }
 
@@ -200,7 +224,6 @@ class _MyHomePageState extends State<MyHomePage> {
       _stringResult = "0";
       list.clear();
       query.clear();
-      _override = true;
       addition = false;
       subtraction = false;
       multiplication = false;
@@ -208,6 +231,21 @@ class _MyHomePageState extends State<MyHomePage> {
       equalState = false;
       decimalState = false;
     });
+  }
+
+  void _clear() {
+    print("Erasing list: " + list.toString());
+    list.clear();
+    list.add(0);
+    if (equalState) {
+      query.clear();
+    }
+    setState(() {
+      _result = 0;
+      _stringResult = _result.toString();
+      resultList = _stringResult;
+    });
+    clear = false;
   }
 
   void _negate() {
@@ -360,7 +398,7 @@ class _MyHomePageState extends State<MyHomePage> {
     // We check if the user just hit the "equal" sign so we don't perform
     // more arithmetic than needed and check if any arithmetic should
     // be completed before moving on
-    else if ((subtraction || multiplication || division) && !equalState) {
+    else if ((subtraction || multiplication || division) && (!equalState) && clear) {
       _equal();
     }
     // We run a continuous addition result if the user keeps pressing "+"
@@ -389,7 +427,7 @@ class _MyHomePageState extends State<MyHomePage> {
     if (query.isEmpty) {
       query = List.from(list);
     }
-    else if ((addition || multiplication || division) && !equalState) {
+    else if ((addition || multiplication || division) && (!equalState) && clear) {
       _equal();
     }
     else {
@@ -415,7 +453,7 @@ class _MyHomePageState extends State<MyHomePage> {
     if (query.isEmpty) {
       query = List.from(list);
     }
-    else if ((addition || subtraction || division) && !equalState) {
+    else if ((addition || subtraction || division) && (!equalState) && clear) {
       _equal();
     }
     else {
@@ -441,7 +479,7 @@ class _MyHomePageState extends State<MyHomePage> {
     if (query.isEmpty) {
       query = List.from(list);
     }
-    else if ((addition || multiplication || subtraction) && !equalState) {
+    else if ((addition || multiplication || subtraction) && (!equalState) && clear) {
       _equal();
     }
     else {
@@ -529,7 +567,7 @@ class _MyHomePageState extends State<MyHomePage> {
           const SizedBox(height: 20),
           Row(
             children: [
-              button("AC"),
+              if (clear) button("C") else button("AC"),
               widthSeparation(),
               button("+/-"),
               widthSeparation(),
@@ -627,6 +665,9 @@ class _MyHomePageState extends State<MyHomePage> {
               switch(input) {
                 case "AC":
                   _allClear();
+                  break;
+                case "C":
+                  _clear();
                   break;
                 case "+/-":
                   _negate();
