@@ -55,19 +55,31 @@ class _MyHomePageState extends State<MyHomePage> {
     });
   }
 
-  void checkDecimals() {
+  // void _addComma() {
+  //
+  //   for (int i = 0; i < _stringResult.length; i++) {
+  //
+  //     if ()
+  //
+  //   }
+  //
+  // }
 
-    if (_stringResult.contains(".")) {
-
-      for (int i = 0; i < _stringResult.length; i++) {
-
-        if ()
-
-      }
-
-    }
-
-  }
+  // void checkDecimals() {
+  //
+  //   if (_stringResult.contains(".")) {
+  //
+  //     for (int i = 0; i < _stringResult.length; i++) {
+  //
+  //       if (_stringResult[i] == ".") {
+  //
+  //       }
+  //
+  //     }
+  //
+  //   }
+  //
+  // }
 
   void clearArithmetic() {
 
@@ -91,7 +103,10 @@ class _MyHomePageState extends State<MyHomePage> {
       query.clear();
 
     }
-
+    if (_stringResult.length >= 9) {
+      return;
+    }
+    print("list : " + list.toString());
     if (resultList.contains('.')) {
 
       resultList = resultList + input;
@@ -117,15 +132,23 @@ class _MyHomePageState extends State<MyHomePage> {
     }
     else {
 
-      list.add(num.parse(input));
-      setState(() {
+      if (_stringResult == "0") {
+        _stringResult = "";
+      }
+
+      if (!(list.isEmpty && input == "0")) {
+        setState(() {
+          _stringResult = list.join() + input;
+          resultList = _stringResult;
+        });
+        list.add(num.parse(input));
         _result = num.parse(list.join());
-        _stringResult = _result.toString();
-        resultList = _result.toString();
-      });
+      }
+
       print(_result);
 
     }
+    print("list : " + list.toString());
 
   }
 
@@ -200,6 +223,7 @@ class _MyHomePageState extends State<MyHomePage> {
       _result = _result.toInt();
       setState(() {
         _stringResult = _result.toString();
+        //resultList = _stringResult;
       });
       print(_stringResult);
       query.clear();
@@ -207,11 +231,11 @@ class _MyHomePageState extends State<MyHomePage> {
 
     }
 
-    if (_result.round() == (_result + 1) && (checkDecimals())) {
-
-
-
-    }
+    // if (_result.round() == (_result + 1) && (checkDecimals())) {
+    //
+    //
+    //
+    // }
 
     resultList = "0";
 
@@ -236,7 +260,7 @@ class _MyHomePageState extends State<MyHomePage> {
   void _clear() {
     print("Erasing list: " + list.toString());
     list.clear();
-    list.add(0);
+    //list.add(0);
     if (equalState) {
       query.clear();
     }
@@ -366,7 +390,13 @@ class _MyHomePageState extends State<MyHomePage> {
     // of the number that we keep manipulating when doing arithmetic
     // or when using the percent on our result after pressing equals
     if (query.join() == _result.toString()) {
-      _result = _result / 100;
+      if ((_result / 100) == (_result / 100).round()) {
+        _result = _result / 100;
+        _result = _result.toInt();
+      }
+      else {
+        _result = _result / 100;
+      }
       query.clear();
       query.add(_result);
       setState(() {
@@ -376,7 +406,13 @@ class _MyHomePageState extends State<MyHomePage> {
       print(query);
     }
     else {
-      _result = _result / 100;
+      if ((_result / 100) == (_result / 100).round()) {
+        _result = _result / 100;
+        _result = _result.toInt();
+      }
+      else {
+        _result = _result / 100;
+      }
       list.clear();
       list.add(_result);
       setState(() {
@@ -560,7 +596,8 @@ class _MyHomePageState extends State<MyHomePage> {
               padding: const EdgeInsets.only(right: 10.0),
               child: Text(
                   _stringResult,
-                  style: TextStyle(fontSize: 80, fontWeight: FontWeight.bold),
+                  style: TextStyle(fontWeight: FontWeight.bold,
+                      fontSize: _stringResult.length == 8 ? 78 : _stringResult.length == 9 ? 75 : 80),
               ),
             ),
           ),
